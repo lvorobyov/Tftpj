@@ -20,3 +20,10 @@ dependencies {
 }
 
 mainClassName = 'c.lev.tftp.ServerApp'
+
+jar {
+    manifest.attributes(
+            "Manifest-Version": "1.0",
+            "Main-Class": mainClassName
+    )
+}
