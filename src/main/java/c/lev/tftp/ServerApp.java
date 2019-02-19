@@ -12,7 +12,7 @@ public class ServerApp {
 
     private static final int PORT = 8969;
     private static final int TIMEOUT = 500;
-    private static boolean active = true;
+    private static volatile boolean active = true;
 
     public static void main(String[] args) {
         System.out.println("Server starting...");
