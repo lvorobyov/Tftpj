@@ -11,7 +11,8 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.sql.Timestamp;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ServerApp {
 
@@ -19,6 +20,8 @@ public class ServerApp {
     private static final int TIMEOUT = 500;
     private static final int BUFFER_SIZE = 512;
     private static volatile boolean active = true;
+    private static Thread receiver = null;
+    private static ExecutorService executor = Executors.newCachedThreadPool();
 
     public static void main(String[] args) {
         System.out.println("Server starting...");
@@ -35,14 +38,15 @@ public class ServerApp {
                     socket.send(new DatagramPacket(name.getBytes(),name.length(),p.getSocketAddress()));
                 } catch (SocketTimeoutException ignored) { }
             } while (active);
-        } catch (IOException e) {
+            receiver.join();
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
         System.out.println("Bye!");
     }
 
     private static void startReceiver() {
-        new Thread(() -> {
+        receiver = new Thread(() -> {
             try {
                 Selector selector = Selector.open();
                 ServerSocketChannel channel = ServerSocketChannel.open();
@@ -66,24 +70,38 @@ public class ServerApp {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        }).start();
+        });
+        receiver.start();
     }
 
     private static void startConnection(Socket client) {
-        try {
-            val file = new File("downloaded_" + System.currentTimeMillis() + ".mkv");
-            val output = new FileOutputStream(file);
-            val input = client.getInputStream();
-            byte[] buffer = new byte[BUFFER_SIZE];
-            int len;
-            while ((len = input.read(buffer)) != -1) {
-                output.write(buffer, 0, len);
+        executor.execute(new WorkerRunnable(client));
+    }
+
+    static class WorkerRunnable implements Runnable {
+        private Socket client;
+
+        WorkerRunnable(Socket client) {
+            this.client = client;
+        }
+
+        @Override
+        public void run() {
+            try {
+                val file = new File("downloaded_" + System.currentTimeMillis() + ".mkv");
+                val output = new FileOutputStream(file);
+                val input = client.getInputStream();
+                byte[] buffer = new byte[BUFFER_SIZE];
+                int len;
+                while ((len = input.read(buffer)) != -1) {
+                    output.write(buffer, 0, len);
+                }
+                input.close();
+                output.close();
+                client.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            input.close();
-            output.close();
-            client.close();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }
