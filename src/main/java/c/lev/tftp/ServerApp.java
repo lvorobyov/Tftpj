@@ -13,6 +13,7 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Logger;
 
 public class ServerApp {
 
@@ -22,6 +23,7 @@ public class ServerApp {
     private static volatile boolean active = true;
     private static Thread receiver = null;
     private static ExecutorService executor = Executors.newCachedThreadPool();
+    private static Logger logger = Logger.getLogger("Tftp");
 
     public static void main(String[] args) {
         System.out.println("Server starting...");
@@ -54,6 +56,7 @@ public class ServerApp {
                 channel.bind(new InetSocketAddress(PORT));
                 channel.configureBlocking(false);
                 channel.register(selector, SelectionKey.OP_ACCEPT);
+                logger.info("Start listening");
                 do {
                     int nn = selector.select(TIMEOUT);
                     if (nn == 0)
@@ -69,6 +72,7 @@ public class ServerApp {
                 } while (active);
                 channel.close();
                 selector.close();
+                logger.info("Stop listening");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -90,6 +94,7 @@ public class ServerApp {
         @Override
         public void run() {
             try {
+                logger.info("Downloading...");
                 val file = new File("downloaded_" + System.currentTimeMillis() + ".mkv");
                 val output = new FileOutputStream(file);
                 val input = client.getInputStream();
@@ -101,6 +106,7 @@ public class ServerApp {
                 input.close();
                 output.close();
                 client.close();
+                logger.info("Downloaded");
             } catch (IOException e) {
                 e.printStackTrace();
             }
