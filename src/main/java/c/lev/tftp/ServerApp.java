@@ -57,6 +57,7 @@ public class ServerApp {
                 channel.bind(new InetSocketAddress(PORT));
                 channel.configureBlocking(false);
                 channel.register(selector, SelectionKey.OP_ACCEPT);
+                ServerSocket socket = channel.socket();
                 logger.info("Start listening");
                 do {
                     int nn = selector.select(TIMEOUT);
@@ -66,8 +67,7 @@ public class ServerApp {
                     Set<SelectionKey> keys = selector.selectedKeys();
                     for (val key: keys) {
                         if ((key.readyOps() & SelectionKey.OP_ACCEPT) != 0) {
-                            SocketChannel client = channel.accept();
-                            startConnection(client.socket());
+                            startConnection(socket.accept());
                         }
                     }
 
