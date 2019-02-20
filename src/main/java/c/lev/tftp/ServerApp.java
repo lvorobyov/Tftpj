@@ -11,6 +11,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
@@ -62,13 +63,15 @@ public class ServerApp {
                     if (nn == 0)
                         continue;
 
-                    for (val key: selector.selectedKeys()) {
+                    Set<SelectionKey> keys = selector.selectedKeys();
+                    for (val key: keys) {
                         if ((key.readyOps() & SelectionKey.OP_ACCEPT) != 0) {
                             SocketChannel client = channel.accept();
                             startConnection(client.socket());
                         }
                     }
 
+                    keys.clear();
                 } while (active);
                 channel.close();
                 selector.close();
