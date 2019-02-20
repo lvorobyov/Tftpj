@@ -51,6 +51,7 @@ public class ServerApp {
             try {
                 Selector selector = Selector.open();
                 ServerSocketChannel channel = ServerSocketChannel.open();
+                channel.bind(new InetSocketAddress(PORT));
                 channel.configureBlocking(false);
                 channel.register(selector, SelectionKey.OP_ACCEPT);
                 do {
