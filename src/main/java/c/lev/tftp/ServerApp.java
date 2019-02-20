@@ -39,6 +39,7 @@ public class ServerApp {
                 } catch (SocketTimeoutException ignored) { }
             } while (active);
             receiver.join();
+            executor.shutdown();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
