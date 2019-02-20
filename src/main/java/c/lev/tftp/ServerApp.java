@@ -77,7 +77,7 @@ public class ServerApp {
     }
 
     private static void startConnection(Socket client) {
-        executor.execute(new WorkerRunnable(client));
+        new Thread(new WorkerRunnable(client)).start();
     }
 
     static class WorkerRunnable implements Runnable {
