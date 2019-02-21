@@ -2,6 +2,7 @@ package c.lev.tftp;
 
 import lombok.val;
 import org.apache.tika.Tika;
+import org.clapper.util.misc.MIMETypeUtil;
 import sun.misc.Signal;
 
 import java.io.File;
@@ -11,6 +12,8 @@ import java.net.*;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -98,7 +101,7 @@ public class ServerApp {
         public void run() {
             try {
                 logger.info("Downloading...");
-                val file = new File("downloaded_" + System.currentTimeMillis() + ".mkv");
+                val file = new File("downloaded_" + System.currentTimeMillis());
                 val output = new FileOutputStream(file);
                 val input = client.getInputStream();
                 byte[] buffer = new byte[BUFFER_SIZE];
@@ -113,6 +116,8 @@ public class ServerApp {
                 Tika tika = new Tika();
                 val mime = tika.detect(file);
                 logger.info("Mime-Type: " + mime);
+                val ext = MIMETypeUtil.fileExtensionForMIMEType(mime);
+                Files.move(file.toPath(), Paths.get(file.toPath().toString() + '.' + ext));
             } catch (IOException e) {
                 e.printStackTrace();
             }
