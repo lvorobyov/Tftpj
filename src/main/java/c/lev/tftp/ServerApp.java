@@ -1,6 +1,7 @@
 package c.lev.tftp;
 
 import lombok.val;
+import lombok.var;
 import org.apache.tika.Tika;
 import org.clapper.util.misc.MIMETypeUtil;
 import sun.misc.Signal;
@@ -14,6 +15,8 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -28,6 +31,15 @@ public class ServerApp {
     private static Thread receiver = null;
     private static ExecutorService executor = Executors.newCachedThreadPool();
     private static Logger logger = Logger.getLogger("Tftp");
+
+    private static Map<String,String> mimeTypes = new HashMap<String, String>() {{
+        put("video/3gpp","3gp");
+        put("audio/mpeg","mp3");
+        put("video/mp4","mp4");
+        put("audio/x-flac", "flac");
+        put("application/x-tika-ooxml","docx");
+        put("application/x-tika-msoffice","doc");
+    }};
 
     public static void main(String[] args) {
         System.out.println("Server starting...");
@@ -116,7 +128,8 @@ public class ServerApp {
                 Tika tika = new Tika();
                 val mime = tika.detect(file);
                 logger.info("Mime-Type: " + mime);
-                val ext = MIMETypeUtil.fileExtensionForMIMEType(mime);
+                var ext = (mimeTypes.containsKey(mime))?
+                        mimeTypes.get(mime) : MIMETypeUtil.fileExtensionForMIMEType(mime);
                 Files.move(file.toPath(), Paths.get(file.toPath().toString() + '.' + ext));
             } catch (IOException e) {
                 e.printStackTrace();
