@@ -17,6 +17,9 @@ public class MimeTest {
                 "video/3gpp",
                 "video/3gpp2",
 
+                "video/x-matroska",
+                "video/x-msvideo",
+
                 "image/gif",
                 "image/jpeg",
                 "image/pjpeg",

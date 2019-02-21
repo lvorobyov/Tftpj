@@ -40,6 +40,7 @@ public class ServerApp {
         put("video/ogg","ogg");
         put("video/webm","webm");
         put("audio/webm","webm");
+        put("video/x-matroska","mkv");
         put("video/x-ms-wmv","wmv");
         put("video/x-flv","flv");
         put("audio/x-flac", "flac");
