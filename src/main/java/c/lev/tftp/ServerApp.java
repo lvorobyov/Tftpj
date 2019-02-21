@@ -1,6 +1,7 @@
 package c.lev.tftp;
 
 import lombok.val;
+import org.apache.tika.Tika;
 import sun.misc.Signal;
 
 import java.io.File;
@@ -10,7 +11,6 @@ import java.net.*;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -110,6 +110,9 @@ public class ServerApp {
                 output.close();
                 client.close();
                 logger.info("Downloaded");
+                Tika tika = new Tika();
+                val mime = tika.detect(file);
+                logger.info("Mime-Type: " + mime);
             } catch (IOException e) {
                 e.printStackTrace();
             }
