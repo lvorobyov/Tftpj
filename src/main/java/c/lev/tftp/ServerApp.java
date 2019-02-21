@@ -39,9 +39,18 @@ public class ServerApp {
         put("video/mp4","mp4");
         put("video/ogg","ogg");
         put("video/webm","webm");
+        put("audio/webm","webm");
         put("video/x-ms-wmv","wmv");
         put("video/x-flv","flv");
         put("audio/x-flac", "flac");
+        put("audio/aac","aac");
+        put("audio/ogg","ogg");
+        put("audio/vorbis","ogg");
+        put("audio/x-ms-wma","wma");
+        put("audio/vnd.wave","wav");
+        put("audio/vnd.rn-realaudio","rm");
+        put("image/vnd.microsoft.icon","ico");
+        put("image/webp","webp");
         put("application/x-tika-ooxml","docx");
         put("application/x-tika-msoffice","doc");
     }};
