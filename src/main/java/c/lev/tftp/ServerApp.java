@@ -34,8 +34,13 @@ public class ServerApp {
 
     private static Map<String,String> mimeTypes = new HashMap<String, String>() {{
         put("video/3gpp","3gp");
+        put("video/3gpp2","3gp");
         put("audio/mpeg","mp3");
         put("video/mp4","mp4");
+        put("video/ogg","ogg");
+        put("video/webm","webm");
+        put("video/x-ms-wmv","wmv");
+        put("video/x-flv","flv");
         put("audio/x-flac", "flac");
         put("application/x-tika-ooxml","docx");
         put("application/x-tika-msoffice","doc");
