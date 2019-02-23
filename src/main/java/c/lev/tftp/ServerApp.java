@@ -55,6 +55,7 @@ public class ServerApp {
         put("application/x-tika-ooxml","docx");
         put("application/x-tika-msoffice","doc");
         put("application/x-fictionbook+xml","fb2");
+        put("application/epub+zip","epub");
     }};
 
     public static void main(String[] args) {
