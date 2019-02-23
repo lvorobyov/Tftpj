@@ -54,6 +54,7 @@ public class ServerApp {
         put("image/webp","webp");
         put("application/x-tika-ooxml","docx");
         put("application/x-tika-msoffice","doc");
+        put("application/x-fictionbook+xml","fb2");
     }};
 
     public static void main(String[] args) {
