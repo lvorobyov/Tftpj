@@ -1,0 +1,17 @@
+= File transfer server on Java
+
+The simple file transfer server, that recognises file formats
+
+== Installation
+
+clone this repository and compile. Then run `java -jar tftpj.jar`
+
+Tftpj listens the 8970 tcp and uses the same udp port. So add them to the firewall exceptions.
+
+On other side call this: `nc -vN localhost 8970 < file.mp3`.
+
+In the directory with server appears a file `downloaded_<timestamp>.mp3`. Done.
+
+== See also
+
+https://github.com/lvorobyov/Tftp[Tftp] - the same server written in C++.
