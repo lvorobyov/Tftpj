@@ -1,3 +1,7 @@
+/**
+ * Copyright (c) 2021, Лев Воробьёв
+ */
+
 package c.lev.tftp;
 
 import lombok.val;
